@@ -6,7 +6,6 @@ path = "CFL_data"
 vessel_folders = [
     "VesselD20H15",
     "VesselD50H5",
-    "VesselD50H10",
     "VesselD50H10P",
     "VesselD50H20P",
     "VesselD75H15P",
@@ -17,10 +16,12 @@ vessel_folders = [
 ]
 
 for folder in vessel_folders:
+    print(folder)
     if os.path.exists(os.path.join(path, folder, "Output_GRADxyt", "OUTPUT.mat")):
         output_path = os.path.join(path, folder, "Output_GRADxyt", "OUTPUT.mat")
     else:
         output_path = os.path.join(path, folder, "Output_GRADxy", "OUTPUT.mat")
+    print(output_path)
     output = sio.loadmat(output_path)
     try:
         os.mkdir(os.path.join(path, 'input'))
