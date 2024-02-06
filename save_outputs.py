@@ -16,15 +16,19 @@ vessel_folders = [
     "VesselD150H10P",
 ]
 
-output = sio.loadmat(
-    os.path.join(path, vessel_folders[0], "Output_GRADxyt", "OUTPUT.mat")
-)
-
-print(output["MI_core_l"][:, :, 0].shape)
-
-cv2.imshow("f", output["MI_core_l"][:, :, 0] * 255)
-cv2.imwrite("example.jpg", output["MI_core_l"][:, :, 0] * 255)
-cv2.waitKey()
-
-cv2.destroyAllWindows()
-cv2.imwrite("example.jpg", output["MI_core_l"][:, :, 0] * 255)
+for folder in vessel_folders:
+    if os.path.exists(os.path.join(path, folder, "Output_GRADxyt", "OUTPUT.mat")):
+        output_path = os.path.join(path, folder, "Output_GRADxyt", "OUTPUT.mat")
+    else:
+        output_path = os.path.join(path, folder, "Output_GRADxy", "OUTPUT.mat")
+    output = sio.loadmat(output_path)
+    try:
+        os.mkdir(os.path.join(path, 'input'))
+        os.mkdir(os.path.join(path, 'output'))
+    except FileExistsError:
+        pass
+    for i in range(output["MI_core_l"].shape[2]):
+        core_img = output["MI_core_l"][:, :, i]
+        cv2.imwrite(os.path.join(path, 'output', "{}_{}.jpg".format(folder, i)), core_img * 255)
+        RC_img = output["MI_RC_l"][:, :, i]
+        cv2.imwrite(os.path.join(path, "input", "{}_{}.jpg".format(folder, i)), RC_img)
