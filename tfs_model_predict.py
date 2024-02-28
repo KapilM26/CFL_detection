@@ -34,8 +34,9 @@ predictions = response.json()['predictions']
 predictions_array = np.array(predictions)
 print(predictions_array[predictions_array>=0.5])
 # print(predictions_array[0].shape)
-# predictions_array[predictions_array>=0.5] = 1
-# predictions_array[predictions_array<0.5] = 0
+threshold = 0.7
+predictions_array[predictions_array>=threshold] = 1
+predictions_array[predictions_array<threshold] = 0
 # print(predictions_array)
 predictions_array = predictions_array.reshape(256,256)
 # Convert predictions to a NumPy array
